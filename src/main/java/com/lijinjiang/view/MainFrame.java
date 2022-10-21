@@ -1,6 +1,7 @@
 package com.lijinjiang.view;
 
 import com.lijinjiang.beautyeye.ch3_button.BEButtonUI;
+import net.sourceforge.tess4j.ITessAPI;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 
@@ -81,6 +82,7 @@ public class MainFrame extends JFrame {
         for (String key : keys) {
             languageCombobox.addItem(key);
         }
+        languageCombobox.setSelectedItem("中文");
         languageCombobox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -201,10 +203,9 @@ public class MainFrame extends JFrame {
 
         ITesseract instance = new Tesseract();
         // 设置语言库位置
-        instance.setDatapath("src/main/resources/tessdata");
+        instance.setDatapath("src/main/resources/data");
         // 设置语言
         instance.setLanguage(language);
-
         Thread thread = new Thread() {
             public void run() {
                 String result = null;
