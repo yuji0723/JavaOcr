@@ -54,7 +54,7 @@ Tess4J是对Tesseract OCR API 的Java JNA 封装。使 java 能够通过调用 T
 
 其他语言库可根据自己需求选择下载，tessdata 语言库下载地址：[**https://github.com/tesseract-ocr/tessdata**](https://github.com/tesseract-ocr/tessdata)
 
-<font color="red">**注意：如果你下载的语言库只有几十、几百kb，说明你下载一场了，程序启动不了的，解决办法就是连接外网下载**</font>
+<font color="red">**注意：如果你下载的语言库只有几十、几百kb，说明你下载异常了，程序启动不了的，解决办法就是连接外网下载**</font>
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/b53c1361e26c402abddd4b8925411e18.png)
 
 ## 2.2 主要实现代码
