@@ -34,7 +34,7 @@ public class MainFrame extends JFrame {
     private JComboBox<String> languageCombobox;
     private Map<String, String> languageMap;
     private JSplitPane splitPane;
-    protected JLabel previewLabel;
+    protected JLabel previewLabel;//预览标签
     private JTextArea resultArea;
     protected BufferedImage ocrImage;
     private String filePath;
@@ -111,17 +111,29 @@ public class MainFrame extends JFrame {
     // 初始化显示区
     private void createSplitPane() {
         splitPane = new JSplitPane();
-        splitPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
         // 设置左边预览面板
         previewLabel = new JLabel();
         JScrollPane leftPane = new JScrollPane(previewLabel);
+        leftPane.setBorder(null);//设置边框为空
         splitPane.setLeftComponent(leftPane);
         // 设置右边结果显示面板
         resultArea = new JTextArea();
         resultArea.setFont(new Font("", Font.BOLD, 20));
         resultArea.setBorder(null);
-        splitPane.setRightComponent(new JScrollPane(resultArea));
+        resultArea.setEditable(false);//设置结果区域不可编辑
+        JScrollPane rightPane = new JScrollPane(resultArea);
+        rightPane.setBorder(null);//设置边框为空
+        splitPane.setRightComponent(rightPane);
         this.add(splitPane, BorderLayout.CENTER);
+    }
+
+    //显示预览图片
+    public void setPreviewImage(BufferedImage image) {
+        if (image != null) {
+            ImageIcon previewImage = new ImageIcon(image);
+            previewLabel.setIcon(previewImage);
+            ocrImage = image;
+        }
     }
 
     // 选择需要识别的图片

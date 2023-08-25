@@ -10,7 +10,7 @@
 
     <name>JavaOCR</name>
     <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
+    <url>https://lijinjiang.blog.csdn.net/article/details/127450854</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,22 +22,33 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
         <!-- beautyeye依赖 -->
         <dependency>
             <groupId>com.lijinjiang</groupId>
             <artifactId>beautyeye</artifactId>
-            <version>3.8</version>
+            <version>3.9</version>
         </dependency>
-
         <!-- Tess4J依赖 -->
         <dependency>
             <groupId>net.sourceforge.tess4j</groupId>
             <artifactId>tess4j</artifactId>
-            <version>5.4.0</version>
+            <version>5.6.0</version>
         </dependency>
+        <!--slf4j日志依赖-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>2.0.7</version>
+        </dependency>
+
     </dependencies>
 
 </project>

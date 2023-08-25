@@ -14,12 +14,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * @ClassName ScreenshotWindow
  * @Description 截图窗口
- * @Author Li
- * @Date 2022/10/21 11:26
- * @ModifyDate 2022/10/21 11:26
- * @Version 1.0
+ * @Author Lijinjiang
+ * @ModifyDate 2023/8/25 13:28
+ * @Version 2.0
  */
 public class ScreenshotWindow extends JWindow {
 
@@ -27,53 +25,70 @@ public class ScreenshotWindow extends JWindow {
     private BufferedImage captureImage;
     private BufferedImage tempImage;
     private BufferedImage selectedImage; // 选择的图片
-    private ToolsWindow toolsWindow; // 工具条窗口
+    private ToolsWindow toolsWindow; //工具条窗口
+    protected MainFrame mainFrame; //传递过来的MainFrame
 
-    protected MainFrame mainFrame; // 传递过来的MainFrame
+    private boolean screenshotting = false;//是否正在截图中
 
     public ScreenshotWindow(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
-        // 获取屏幕尺寸
+        //获取屏幕尺寸
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         this.setBounds(0, 0, dimension.width, dimension.height);
 
-        // 截取屏幕
+        //截取屏幕
         Robot robot = null;
         try {
             robot = new Robot();
         } catch (AWTException e) {
             e.printStackTrace();
         }
+
         captureImage = robot.createScreenCapture(new Rectangle(0, 0, dimension.width, dimension.height));
 
         this.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    exit();//如果点击的右键，取消截图
+                }
+            }
+
             @Override
             public void mousePressed(MouseEvent e) {
-                // 鼠标松开时记录结束点坐标，并隐藏操作窗口
-                startX = e.getX();
-                startY = e.getY();
-                if (toolsWindow != null) {
-                    toolsWindow.setVisible(false);
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    //鼠标左键按下松开时记录结束点坐标，并隐藏操作窗口
+                    startX = e.getX();
+                    startY = e.getY();
                 }
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                // 鼠标松开时，显示操作窗口
-                if (toolsWindow == null) {
-                    toolsWindow = new ToolsWindow(ScreenshotWindow.this, e.getX(), e.getY());
-                } else {
-                    toolsWindow.setLocation(e.getX(), e.getY());
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    if (screenshotting) {
+                        // 鼠标松开时，显示操作窗口
+                        if (toolsWindow == null) {
+                            toolsWindow = new ToolsWindow(ScreenshotWindow.this);
+
+                        }
+                        setToolsLocation(e.getX(), e.getY());//设置工具条位置
+                        toolsWindow.setVisible(true);
+                        toolsWindow.toFront();
+                        screenshotting = false;
+                    }
                 }
-                toolsWindow.setVisible(true);
-                toolsWindow.toFront();
             }
         });
 
         this.addMouseMotionListener(new MouseMotionAdapter() {
-
             @Override
             public void mouseDragged(MouseEvent e) {
+                screenshotting = true;
+                if (toolsWindow != null) {
+                    toolsWindow.setVisible(false);
+                }
                 // 鼠标拖动时，记录坐标并重绘窗口
                 endX = e.getX();
                 endY = e.getY();
@@ -87,7 +102,7 @@ public class ScreenshotWindow extends JWindow {
                 int width = Math.abs(endX - startX) + 1;
                 int height = Math.abs(endY - startY) + 1;
                 // 加上1防止width或height0
-                g.setColor(Color.BLUE);
+                g.setColor(new Color(0, 147, 250));
                 g.drawRect(x - 1, y - 1, width + 1, height + 1);
                 // 减1加1都了防止图片矩形框覆盖掉
                 selectedImage = captureImage.getSubimage(x, y, width, height);
@@ -103,6 +118,12 @@ public class ScreenshotWindow extends JWindow {
         RescaleOp ro = new RescaleOp(0.8f, 0, null);
         tempImage = ro.filter(captureImage, null);
         g.drawImage(tempImage, 0, 0, this);
+    }
+
+    //退出截图
+    public void exit() {
+        this.dispose();//截图框关闭
+        toolsWindow.dispose();//工具条关闭
     }
 
     // 保存图像到文件
@@ -121,7 +142,7 @@ public class ScreenshotWindow extends JWindow {
         fileChooser.setFileFilter(filter);
 
         // 初始化一个默认文件（此文件会生成到桌面上）
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd_HHmmss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
         String fileName = sdf.format(new Date());
         File filePath = FileSystemView.getFileSystemView().getHomeDirectory();
         File defaultFile = new File(filePath + File.separator + fileName + ".jpg");
@@ -140,14 +161,12 @@ public class ScreenshotWindow extends JWindow {
         }
     }
 
-    // 返回截取的图片
-    public void selectImage() {
-        ImageIcon previewImage = new ImageIcon(selectedImage);
-        this.setVisible(false);
-        toolsWindow.dispose(); // 关闭工具窗口
-        // 显示预览图片
-        mainFrame.previewLabel.setIcon(previewImage);
-        mainFrame.ocrImage = selectedImage;
+    public void setToolsLocation(int x, int y) {
+        if (x < startX && y < startY) {
+            toolsWindow.setLocation(x, y - 40);
+        } else if (x > startX && y < startY) {
+            this.setLocation(x - 118, y - 10);
+        }
     }
 
     /*
@@ -158,54 +177,50 @@ public class ScreenshotWindow extends JWindow {
 
         JButton saveBtn, cancelBtn, selectBtn;
 
-        public ToolsWindow(ScreenshotWindow parentWindow, int x, int y) {
+        public ToolsWindow(ScreenshotWindow parentWindow) {
             this.parentWindow = parentWindow;
-            this.setLayout(new BorderLayout());
+            this.setLayout(null);
             JToolBar toolBar = new JToolBar();
-            toolBar.setBorder(null); // 设置边框为空
+            toolBar.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // 设置边框为空
             toolBar.setFloatable(false); // 设置不可移动
 
-            // 保存按钮
-            saveBtn = new JButton("保存");
-            // 取消按钮
-            cancelBtn = new JButton("✘");
-            // 选定按钮
-            selectBtn = new JButton("✔");
+            saveBtn = new JButton("保存");// 保存按钮
+            cancelBtn = new JButton(" ✘ ");// 取消按钮
+            selectBtn = new JButton(" ✔ ");// 选定按钮
 
             saveBtn.addActionListener(this);
             cancelBtn.addActionListener(this);
             selectBtn.addActionListener(this);
 
             toolBar.add(saveBtn);
+            toolBar.addSeparator(new Dimension(10, 30));//添加分隔符
             toolBar.add(cancelBtn);
             toolBar.add(selectBtn);
 
-            this.add(toolBar, BorderLayout.NORTH);
+            toolBar.setBounds(0, 0, 120, 30);
 
-            this.setLocation(x, y);
-            this.pack();
+            this.add(toolBar);
+
+            this.setSize(120, 30);
             this.setVisible(true);
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // TODO Auto-generated method stub
             if (e.getSource() == saveBtn) {
                 try {
                     parentWindow.saveImage();
-                    dispose();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+                    exit();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
             if (e.getSource() == cancelBtn) {
-                parentWindow.dispose();
-                dispose();
+                exit();
             }
             if (e.getSource() == selectBtn) {
-                // 返回选定的图片
-                parentWindow.selectImage();
-                dispose();
+                mainFrame.setPreviewImage(selectedImage);//设置选中的图片
+                exit();
             }
         }
     }
