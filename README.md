@@ -37,7 +37,7 @@ Tess4J是对Tesseract OCR API 的Java JNA 封装。使 java 能够通过调用 T
 下面的是官网的首页图，从这里我们可以获得3个重要的信息：
 
 1.这项目是Apache2.0的开源项目；2.支持Maven依赖导入；3.支持识别的种类很多，包括常用的PNG、JPEG等
-![在这里插入图片描述](https://img-blog.csdnimg.cn/477aab7dd73c4843aece8a478237d2ce.png)
+![在这里插入图片描述](https://gitee.com/lijinjiang01/image/raw/master/JavaOCR/01.png)
 # 2.项目实现
 ## 2.1 项目搭建
 首先是引入 Maven 依赖，我这里直接使用最新的 Tess4J 依赖
@@ -55,7 +55,7 @@ Tess4J是对Tesseract OCR API 的Java JNA 封装。使 java 能够通过调用 T
 其他语言库可根据自己需求选择下载，tessdata 语言库下载地址：[**https://github.com/tesseract-ocr/tessdata**](https://github.com/tesseract-ocr/tessdata)
 
 <font color="red">**注意：如果你下载的语言库只有几十、几百kb，说明你下载异常了，程序启动不了的，解决办法就是连接外网下载**</font>
-![在这里插入图片描述](https://img-blog.csdnimg.cn/b53c1361e26c402abddd4b8925411e18.png)
+![在这里插入图片描述](https://gitee.com/lijinjiang01/image/raw/master/JavaOCR/02.png)
 
 ## 2.2 主要实现代码
 
@@ -96,9 +96,9 @@ Tess4J是对Tesseract OCR API 的Java JNA 封装。使 java 能够通过调用 T
 # 3.效果演示
 ## 3.1 中文识别
 ### 3.1.1 需要识别的图片
-![在这里插入图片描述](https://img-blog.csdnimg.cn/14f862ee900a450da0c3d38cbd2c3f55.jpeg)
+![在这里插入图片描述](https://gitee.com/lijinjiang01/image/raw/master/JavaOCR/03.jpeg)
 ### 3.1.2 识别过程
-![在这里插入图片描述](https://img-blog.csdnimg.cn/ff1c5133c84e438fa7d08585769ec463.gif)
+![在这里插入图片描述](https://gitee.com/lijinjiang01/image/raw/master/JavaOCR/04.gif)
 ### 3.1.3 识别结果
 
 ```bash
@@ -112,9 +112,9 @@ Tess4J是对Tesseract OCR API 的Java JNA 封装。使 java 能够通过调用 T
 当图片内的文字比较清晰时，中文的识别度还是挺高的，特别是图像对比度高的话对于文字识别成功影响很大；而且如果字体较为相近，则容易出错。
 ## 3.2 英文识别
 ### 3.2.1 需要识别的图片
-![在这里插入图片描述](https://img-blog.csdnimg.cn/11d199a0c26c49028128c371b2923f79.jpeg)
+![在这里插入图片描述](https://gitee.com/lijinjiang01/image/raw/master/JavaOCR/05.jpeg)
 ### 3.2.2 识别过程
-![在这里插入图片描述](https://img-blog.csdnimg.cn/48a3f8abff81402e95aa5c9b7f5be6da.gif)
+![在这里插入图片描述](https://gitee.com/lijinjiang01/image/raw/master/JavaOCR/06.gif)
 ### 3.2.3 识别结果
 
 ``` bash
@@ -129,10 +129,10 @@ That there's some good in this world, and it's worth fighting for.
 
 ## 3.3 日文识别
 ### 3.3.1 需要识别的图片
-![在这里插入图片描述](https://img-blog.csdnimg.cn/0fc9ed322b2442d99194cf222593ec5c.jpeg)
+![在这里插入图片描述](https://gitee.com/lijinjiang01/image/raw/master/JavaOCR/07.jpeg)
 
 ### 3.3.2 识别过程
-![在这里插入图片描述](https://img-blog.csdnimg.cn/f776d4fea7834e23a81938b5740d52a4.gif)
+![在这里插入图片描述](https://gitee.com/lijinjiang01/image/raw/master/JavaOCR/08.gif)
 ### 3.3.3 识别结果
 ```bash
 あ な た の 時 間 ( し じ か ん ) は 限 ( か ぎ ) ら れ て い る 。 だ か ら 他 の 誰 か の 人 生
@@ -145,6 +145,6 @@ That there's some good in this world, and it's worth fighting for.
 
 ## 3.4 截图功能
 这里有一个截图功能，可以直接截取需要识别的图片，然后进行识别。我透，这么简单的两个词都识别不出来，看来还需要好好锻炼
-![在这里插入图片描述](https://img-blog.csdnimg.cn/5c116022be3d4e7db63e5e18844fc939.gif)
+![在这里插入图片描述](https://gitee.com/lijinjiang01/image/raw/master/JavaOCR/09.gif)
 
 
