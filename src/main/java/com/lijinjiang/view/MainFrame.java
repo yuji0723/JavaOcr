@@ -75,7 +75,10 @@ public class MainFrame extends JFrame {
         // 截图按钮
         screenshotBtn = new JButton("截图");
         screenshotBtn.setFocusable(false);
-        screenshotBtn.addActionListener(e -> new ScreenshotWindow(this));
+        screenshotBtn.addActionListener(e -> {
+            this.setVisible(false);//设置不可见，进入截图状态
+            new ScreenshotWindow(this);//创建截图窗口
+        });
         // 语言选择下拉框
         languageCombobox = new JComboBox<>();
         Set<String> keys = languageMap.keySet();

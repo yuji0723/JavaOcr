@@ -58,9 +58,12 @@ public class ScreenshotWindow extends JWindow {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    //鼠标左键按下松开时记录结束点坐标，并隐藏操作窗口
+                    //鼠标左键按下时记录结束点坐标，并隐藏操作窗口
                     startX = e.getX();
                     startY = e.getY();
+                } else if (e.getButton() == MouseEvent.BUTTON3) {
+                    //鼠标右键按下，退出截图
+                    exit();
                 }
             }
 
@@ -124,6 +127,7 @@ public class ScreenshotWindow extends JWindow {
     public void exit() {
         this.dispose();//截图框关闭
         toolsWindow.dispose();//工具条关闭
+        mainFrame.setVisible(true);//显示主窗口
     }
 
     // 保存图像到文件
@@ -157,15 +161,18 @@ public class ScreenshotWindow extends JWindow {
                 path += ".jpg";
             }
             ImageIO.write(selectedImage, "jpg", new File(path));
-            dispose();
         }
     }
 
     public void setToolsLocation(int x, int y) {
         if (x < startX && y < startY) {
-            toolsWindow.setLocation(x, y - 40);
+            toolsWindow.setLocation(x, y - 35);
         } else if (x > startX && y < startY) {
-            this.setLocation(x - 118, y - 10);
+            toolsWindow.setLocation(x - 118, y - 35);
+        } else if (x < startX && y > startY) {
+            toolsWindow.setLocation(x, y + 5);
+        } else if (x > startX && y > startY) {
+            toolsWindow.setLocation(x - 118, y + 5);
         }
     }
 
